@@ -34,13 +34,13 @@ A **alteração dos nomes** pode causar falhas na execução automática.
 
 ## 🧩 Funções Principais
 
-### 🧩 Função 1 — Verificação de Permissões
+### 🧩 Verificação de Permissões
 Garante que o script está sendo executado como **Administrador**.  
 Caso contrário, ele se **reinicia com privilégios elevados** automaticamente para evitar falhas durante as instalações.
 
 ---
 
-### 🧩 Função 2 — Criação e Organização de Logs
+### 🧩 Criação e Organização de Logs
 O script gera **logs automáticos** com data e hora, armazenados na pasta `Logs`.  
 Exemplo:
 Logs/Setup_2025-11-11_13-45.log
@@ -49,9 +49,16 @@ Esses logs permitem **auditar e rastrear** todo o processo de execução, identi
 
 ---
 
-### 🧩 Função 3 — Instalação de Programas
-O script executa silenciosamente os instaladores localizados na pasta `Instaladores`.  
-Caso não haja argumentos configurados para uma instalação silenciosa, o script irá abrir o executável do programa e você deve realizar a instalação do programa manualmente.
+### 🧩 Remoção de Bloatwares
+Através de uma **lista segura** contendo todos os nomes de bloatwares indesejáveis, o script faz a remoção de todos eles, deixando o sistema mais limpo e leve, melhorando assim o seu desempenho e consumo de recursos como memória RAM.  
+
+Para adicionar ou excluir algum bloatware, só procurar pela função ``Get-BloatwareAppxLista``
+
+---
+
+### 🧩 Instalação de Programas
+O script executa primeiro as instalações configuradas via Winget e depois instala silenciosamente os programas localizados na pasta `Instaladores`.  
+Caso não haja argumentos configurados para uma instalação silenciosa, o script abrirá o executável do programa e você deverá realizar a instalação do programa manualmente.
 
 Cada instalador pode ser **adicionado ou removido** conforme a necessidade. É só copiar e colar ou remover os códigos já existentes na função ``Get-ProgramasPadraoExecutavel ``
 
@@ -60,7 +67,7 @@ Para adicionar novos programas, basta incluir o instalador na pasta Instaladores
 
 --- 
 
-### 🧩 Função 4 — Instalação e Ativação do Office 2016
+### 🧩 Instalação e Ativação do Office 2016
 A pasta ODT contém o Office Deployment Tool, responsável pela remoção do Microsoft 365 e OneNote com múltiplos idiomas. 
 
 E dentro da pasta Office 2016 Standard está o arquivo config.xml que define:
@@ -80,6 +87,20 @@ cscript ospp.vbs /act
 No arquivo setup_automatizado.ps1, procure o trecho: *ADICIONE MAIS CHAVES AQUI*  
 Ou pela função ``Get-Office2016KeyList``
 E substitua o campo: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX, pelo seu código de licença válido.
+
+---
+
+### 🧩 Definir hostname
+Ao finalizar a instalação e ativação do Office 2016, o script irá pedir para você inserir um nome (hostname) válido para o computador.  
+Após confirmar o hostname, o computador irá reiniciar.
+
+---
+
+### 🧩 Ingressar no domínio
+Quando o computador iniciar, o script **retornará de onde parou**. Nesse momento ele vai **solicitar o domínio** que você deseja ingressar. Depois, é só inserir o login com permissão para ingressar máquinas no domínio.  
+Feito isso, a máquina irá reiniciar mais uma vez e quando iniciar novamente, um mensagem será exibida indicando o término do script.
+
+---
 
 ### 🧱 ***Regras Importantes***
 
