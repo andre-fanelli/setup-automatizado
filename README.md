@@ -1,9 +1,11 @@
-# 💻 Setup Automatizado — Instalação Padrão de Máquinas
+# 💻 Setup Automatizado: Instalação Padrão de Máquinas
 
 ## 🧩 Visão Geral
 
 Este projeto foi criado para **automatizar o processo de configuração e padronização de novas máquinas** na empresa.  
-Através de scripts em **PowerShell** e **Batch**, o sistema executa automaticamente a instalação de softwares essenciais, aplica configurações padrão e ativa o Office 2016 utilizando códigos de licença válidos.
+Através do script em **PowerShell** e do arquivo **Batch** que funciona como um "launcher" em modo adminsitrador, o sistema executa automaticamente a instalação de softwares essenciais, aplica configurações padrão e ativa o Office 2016 utilizando códigos de licença válidos.
+
+A ideia é ter um processo com **poucas interações** ou somente quando for necessário.
 
 O principal objetivo é **reduzir o tempo de setup** de novas estações de trabalho, garantindo que todas fiquem **padronizadas, funcionais e prontas para uso** em poucos minutos.
 
@@ -48,23 +50,20 @@ Esses logs permitem **auditar e rastrear** todo o processo de execução, identi
 ---
 
 ### 🧩 Função 3 — Instalação de Programas
-O script executa silenciosamente os instaladores localizados na pasta `Instaladores`.
+O script executa silenciosamente os instaladores localizados na pasta `Instaladores`.  
+Caso não haja argumentos configurados para uma instalação silenciosa, o script irá abrir o executável do programa e você deve realizar a instalação do programa manualmente.
 
-Cada instalador pode ser **adicionado ou removido** conforme a necessidade.  
-O formato padrão de execução é o seguinte:
+Cada instalador pode ser **adicionado ou removido** conforme a necessidade. É só copiar e colar ou remover os códigos já existentes na função ``Get-ProgramasPadraoExecutavel ``
 
-```powershell
-Start-Process "$PSScriptRoot\Instaladores\7zip.exe" -ArgumentList "/silent" -Wait
-```
 💡 Dica:  
 Para adicionar novos programas, basta incluir o instalador na pasta Instaladores e criar uma nova linha semelhante no script.
 
 --- 
 
 ### 🧩 Função 4 — Instalação e Ativação do Office 2016
-A pasta ODT contém o Office Deployment Tool, responsável pela remoção do Microsoft 365 e OneNote com múltiplos idiomas.
+A pasta ODT contém o Office Deployment Tool, responsável pela remoção do Microsoft 365 e OneNote com múltiplos idiomas. 
 
-O arquivo configuration.xml dentro da pasta do Office 2016 define:
+E dentro da pasta Office 2016 Standard está o arquivo config.xml que define:
 * A edição do Office (Professional, Standard etc.);
 * O idioma da instalação;
 * Os componentes que serão incluídos.
@@ -78,9 +77,9 @@ cscript ospp.vbs /inpkey:XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 cscript ospp.vbs /act  
 
 📍 **Onde colocar o código de ativação?**  
-No arquivo setup_automatizado.ps1, procure o trecho:  
- *====== INSIRA O CÓDIGO DE ATIVAÇÃO DO OFFICE AQUI ======*  
-Substitua o campo: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX, pelo seu código de licença válido.
+No arquivo setup_automatizado.ps1, procure o trecho: *ADICIONE MAIS CHAVES AQUI*  
+Ou pela função ``Get-Office2016KeyList``
+E substitua o campo: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX, pelo seu código de licença válido.
 
 ### 🧱 ***Regras Importantes***
 
@@ -95,7 +94,17 @@ A instalação de softwares e a ativação do Office exigem permissões elevadas
 Todos os arquivos devem estar no mesmo nível do script setup_automatizado.ps1.
 
 📁 **Atualize os instaladores periodicamente**  
-Você pode substituir os arquivos antigos na pasta Instaladores por versões mais recentes dos programas.
+Você pode substituir os arquivos antigos na pasta Instaladores por versões mais recentes dos programas.  
+> ***SÓ LEMBRE DE COPIAR EXATAMENTE O MESMO NOME + EXTENSÃO DO ARQUIVO E COLAR NO SCRIPT***
+
+Exemplo:  
+```
+[pscustomobject]@{
+    Nome       = "7-zip"
+    Arquivo    = "7z2405-x64.exe"
+    Argumentos = "/S"
+},
+```
 
 ### 🧾 Resultado Final
 
@@ -114,9 +123,8 @@ Após a execução completa do script:
 - Registro completo de logs
 - Facilidade de manutenção e atualização
 - Personalização
-
-*O script pode ser editado de acordo com as necessidades da empresa*
-
+  
+✏️ O script pode ser editado de acordo com as necessidades da empresa
 - Adicionar novos softwares à lista de instalação;
 - Alterar parâmetros de instalação silenciosa (/silent, /quiet, etc.);
 - Modificar o comportamento de geração de logs;
